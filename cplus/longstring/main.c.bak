@@ -1,0 +1,49 @@
+#include <string>
+#include <iostream>
+#include <vector>
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(std::string s) {
+	
+	std::vector<std::string> substring;
+
+	int length=-1;
+	int substring_index=0;
+	char previous_char=-1;
+
+	std::string tempstring="";
+	substring.push_back(tempstring);
+
+
+	for (int i=0;i<s.length();i++){		
+		if (s[i]!=previous_char){
+			substring[substring_index]+=s[i];
+			previous_char=s[i];			
+		}else{
+			//new substring
+			substring_index++;
+			std::string tempstring="";
+                        substring.push_back(tempstring);
+			substring[substring_index]+=s[i];
+		}
+		
+	}
+
+	for (int i=0;i<substring.size();i++){
+		if ((int)substring[i].length()>length)
+			length=substring[i].length();
+	}
+	return length;
+        
+    }
+};
+
+
+
+int main(){
+	int answer;
+	Solution s;
+	answer=s.lengthOfLongestSubstring("abccd");
+	std::cout<<answer;
+}
