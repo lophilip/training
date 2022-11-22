@@ -31,7 +31,7 @@ def test_build_heap():
     #print (data)
     #print(swap)
 
-    swap2=build_heap.build_heap_ot1(data2)
+    swap2=build_heap.build_heap(data2)
 
     assert data2 == [1,2,3,5,4],'data is not heap'
     assert check_if_heap(data2) is True,'data is not a heap'
@@ -40,14 +40,14 @@ def test_build_heap():
 def test_build_heap2():
     data=[1,2,3,4,5]
     
-    swap2=build_heap.build_heap_ot1(data)
+    swap2=build_heap.build_heap(data)
     
     assert check_if_heap(data) is True,'data is not a heap'
 
 def test_build_heap3():
     data=[1886, 493, 371, 987, 1924, 30, 1841, 1788, 1725]
     
-    swap2=build_heap.build_heap_ot1(data)
+    swap2=build_heap.build_heap(data)
     
     assert check_if_heap(data) is True,'data is not a heap'
 
@@ -60,7 +60,7 @@ def test_build_heap_random():
         data.append(random.randint(0,2000))
     original_data=list(data)
     
-    swap2=build_heap.build_heap_ot1(data)
+    swap2=build_heap.build_heap(data)
     
     assert check_if_heap(data) is True,'data is not a heap'
 

@@ -2,7 +2,7 @@
 import math
 
 
-def build_heap(data):
+def build_heap_native(data):
     """Build a heap from ``data`` inplace.
 
     Returns a sequence of swaps performed by the algorithm.
@@ -66,7 +66,30 @@ def swap(data,index1,index2):
     data[index2]=temp
     
 
+def shiftdown(data,i):
+    maxindex=i
+    size=len(data)
 
+    leftc,rightc=findchildren(data,i)
+
+    if leftc < size and data[leftc] < data[maxindex]:
+        maxindex=leftc
+
+    if rightc < size and data[rightc] < data[maxindex]:
+        maxindex=rightc
+
+    if i is not maxindex:
+        swap(data,i,maxindex)
+        shiftdown(data,maxindex)
+
+
+def build_heap_ot2(data):
+    size=len(data)
+
+    
+
+    for i in range (round(size/2),1,-1):
+        shiftdown(data,i-1)
 
 def build_heap_ot1(data):
     """Build a heap from ``data`` inplace.
@@ -96,12 +119,16 @@ def build_heap_ot1(data):
             cvalue=data[child]        
     return swaps
 
+def build_heap(data):
+    build_heap_ot2(data)
+
+
 def main():
     n = int(input())
     data = list(map(int, input().split()))
     assert len(data) == n
 
-    swaps = build_heap_ot1(data)
+    swaps = build_heap(data)
 
     print(len(swaps))
     for i, j in swaps:
