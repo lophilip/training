@@ -46,12 +46,18 @@ def findchildren(data,index):
     left=2*index
     right=left+1
 
-    if left>=len(data): #left has exceed size of data
-        left=-1
-    if right>=len(data): #right has exceed size of data
-        right=-1
+    if left>len(data): #left has exceed size of data
+        left=None
+    if right>len(data): #right has exceed size of data
+        right=None
     
-    return left-1, right-1
+    if left is not None:
+        left-=1
+    
+    if right is not None:
+        right-=1
+        
+    return left, right
 
 def swap(data,index1,index2):
     assert isinstance(data,list),'data should be list'
@@ -66,31 +72,37 @@ def swap(data,index1,index2):
     data[index2]=temp
     
 
-def shiftdown(data,i):
+def shiftdown(data,i,s):
+    assert isinstance(s,list),'s is swap list, should be list'
     maxindex=i
     size=len(data)
 
+
     leftc,rightc=findchildren(data,i)
 
-    if leftc < size and data[leftc] < data[maxindex]:
-        maxindex=leftc
+    if leftc is not None:
+        if leftc < size and data[leftc] < data[maxindex] and leftc >= 0:
+            maxindex=leftc
 
-    if rightc < size and data[rightc] < data[maxindex]:
-        maxindex=rightc
+    if rightc is not None:
+        if rightc < size and data[rightc] < data[maxindex] and rightc >= 0:
+            maxindex=rightc
 
     if i is not maxindex:
+        s.append((i,maxindex))
         swap(data,i,maxindex)
-        shiftdown(data,maxindex)
+        shiftdown(data,maxindex,s)
 
 
 def build_heap_ot2(data):
     size=len(data)
+    s=[]
 
+    for i in range (size//2-1,-1,-1):
+        shiftdown(data,i,s)
+
+    return s
     
-
-    for i in range (round(size/2),1,-1):
-        shiftdown(data,i-1)
-
 def build_heap_ot1(data):
     """Build a heap from ``data`` inplace.
 
@@ -120,7 +132,8 @@ def build_heap_ot1(data):
     return swaps
 
 def build_heap(data):
-    build_heap_ot2(data)
+    s=build_heap_ot2(data)
+    return s
 
 
 def main():

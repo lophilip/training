@@ -5,7 +5,10 @@ from collections import namedtuple
 AssignedJob = namedtuple("AssignedJob", ["worker", "started_at"])
 
 
-def assign_jobs(n_workers, jobs):
+
+    
+
+def assign_jobs_native(n_workers, jobs):
     # TODO: replace this code with a faster algorithm.
     result = []
     next_free_time = [0] * n_workers
@@ -16,6 +19,20 @@ def assign_jobs(n_workers, jobs):
 
     return result
 
+
+
+workertuple = namedtuple("worker", ["worker", "free_at"])
+
+class workerclass:
+    def __init__(self,nworker):
+        self.worker_heap=[]
+        
+        for i in range (0,nworker):
+            self.worker_heap.append(workertuple(i,0))
+            
+
+def assign_jobs(n_workers, jobs):
+    return assign_jobs_native(n_workers,jobs)
 
 def main():
     n_workers, n_jobs = map(int, input().split())
