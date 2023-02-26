@@ -75,17 +75,26 @@ class hash_chain_class():
         assert isinstance(thestring,str),'thestring should be a string, of which hash will be returned'
 
         for c in reversed(thestring):
-            ans = (ans * self._multiplier + ord(c)) % self._prime
+            ans = (ans * multiplier + ord(c)) % prime
         ans=ans%self.num_buckets
 
         return ans
     
     def add_string(self,input) -> None:
         hash=self.calculate_hash(input)
+        added=False
+        
+        stringlist=[]
         if hash<self.num_buckets:
-            self.chain[hash].append(input)
+            stringlist=self.chain[hash]
         else:
-            self.chain[self.num_buckets-1].append(input)
+            stringlist=self.chain[self.num_buckets-1]
+            
+        if input not in stringlist:
+            stringlist.append(input)
+            added=True
+            
+        return added
 
     def del_string(self,input) -> bool:
         returnvalue=False
@@ -147,7 +156,8 @@ class QueryProcessor_hash_chains:
     def __init__(self, bucket_count):
         self.hash_chain=hash_chain_class(bucket_count)
 
-
+    def read_query(self):
+        return Query(input().split())
  
     def process_query(self, query):
         if query.type == "check":
@@ -158,7 +168,7 @@ class QueryProcessor_hash_chains:
             for x in list_string:
                 printout+=x
                 printout+=' '
-            printout=printout[-1]
+            printout=printout[:-1]
             print(printout)
 
             
@@ -179,7 +189,11 @@ class QueryProcessor_hash_chains:
         n = int(input())
         for i in range(n):
             self.process_query(self.read_query())
+
+
+
 if __name__ == '__main__':
     bucket_count = int(input())
     #proc = QueryProcessor(bucket_count)
+    proc = QueryProcessor_hash_chains(bucket_count)
     proc.process_queries()
