@@ -27,21 +27,25 @@ class solver_hash_class:
     def calc_hash_precalculation(self):
         self.h1 = [0] * (len(self.s)+1)
         self.h2 = [0] * (len(self.s)+1)        
-
+        self.xpower_withmod1 = [0] * (len(self.s)+1)
+        self.xpower_withmod2 = [0] * (len(self.s)+1)
         for i in range(1, len(self.s)+1):
             self.h1[i] = (self.h1[i - 1] * self.x + ord(self.s[i-1])) % self.m1
                         
             self.h2[i] = (self.h2[i - 1] * self.x + ord(self.s[i-1])) % self.m2
+            
 
+            
+            self.xpower_withmod1[i]=pow(self.x,i,self.m1)
+            self.xpower_withmod2[i]=pow(self.x,i,self.m2)
         
             
     def calculte_hash(self, a, l):
-        y1 = pow(self.x, l, self.m1)
-        y2= pow(self.x, l, self.m2)
         
-        h1=(self.h1[a+l]-self.h1[a]*y1)%self.m1
         
-        h2=(self.h2[a+l]-self.h2[a]*y2)%self.m2        
+        h1=(self.h1[a+l]-self.h1[a]*self.xpower_withmod1[l])%self.m1
+        
+        h2=(self.h2[a+l]-self.h2[a]*self.xpower_withmod2[l])%self.m2        
         
         return h1, h2
     

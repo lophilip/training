@@ -1,7 +1,7 @@
 # python3
-
 import sys
-import random
+
+#from substring_equality_simple import *
 
 
 class Solver:
@@ -12,7 +12,22 @@ class Solver:
         s=self.s
         return s[a : a + l] == s[b : b + l]
 
+def HashTable(s, prime, x):
+    hash_table = list([] for _ in range(len(s) + 1))
+    hash_table[0] = 0
+    for i in range(1, len(s) + 1):
+        hash_table[i] = (hash_table[i - 1] * x + ord(s[i - 1])) % prime
+    return hash_table
 
+
+def HashValue(hash_table, prime, x, start, length):
+    y = pow(x, length, prime)
+    hash_value = (hash_table[start + length] - y * hash_table[start]) % prime
+    return hash_value
+
+
+#this is much slower then substring_equality_simple.py, because it uses classes
+#in python accessing self is much slower then accessing a local or glbal variable.
 class solver_hash_class:
     def __init__(self, s):
         self.s = s
@@ -25,23 +40,16 @@ class solver_hash_class:
 
 
     def calc_hash_precalculation(self):
-        self.h1 = [0] * (len(self.s)+1)
-        self.h2 = [0] * (len(self.s)+1)        
-
-        for i in range(1, len(self.s)+1):
-            self.h1[i] = (self.h1[i - 1] * self.x + ord(self.s[i-1])) % self.m1
-                        
-            self.h2[i] = (self.h2[i - 1] * self.x + ord(self.s[i-1])) % self.m2
-
-        
+        self.h1 = HashTable(self.s, self.m1, self.x)
+        self.h2 = HashTable(self.s, self.m2, self.x)                       
             
     def calculte_hash(self, a, l):
-        y1 = pow(self.x, l, self.m1)
-        y2= pow(self.x, l, self.m2)
         
-        h1=(self.h1[a+l]-self.h1[a]*y1)%self.m1
         
-        h2=(self.h2[a+l]-self.h2[a]*y2)%self.m2        
+        h1=HashValue(self.h1, self.m1, self.x, a, l)
+        
+        
+        h2=HashValue(self.h2, self.m2, self.x, a, l)
         
         return h1, h2
     
