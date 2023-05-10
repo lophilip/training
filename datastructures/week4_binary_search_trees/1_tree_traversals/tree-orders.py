@@ -5,6 +5,17 @@ sys.setrecursionlimit(10**6) # max depth of recursion
 threading.stack_size(2**27)  # new thread will get stack of such size
 
 class TreeOrders:
+  def __init__(self):
+    self.n = 0
+    self.key = []
+    self.left = []
+    self.right = []
+    self.result = []
+  def add(self, key, left, right):    
+    self.key.append(key)
+    self.left.append(left)
+    self.right.append(right)
+  
   def read(self):
     self.n = int(sys.stdin.readline())
     self.key = [0 for i in range(self.n)]
@@ -16,24 +27,49 @@ class TreeOrders:
       self.left[i] = b
       self.right[i] = c
 
-  def inOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
-                
+  def inOrder(self,node=None):
+    if node is None:
+      self.result = []
+      node=0
+    
+    if self.left[node] != -1:
+      self.inOrder(self.left[node])
+      
+    self.result.append(self.key[node])
+    
+    if self.right[node] != -1:
+        self.inOrder(self.right[node])
+    
+
+    return self.result              
+
+  def preOrder(self,node=None):
+    if node is None:
+      self.result = []
+      node=0
+
+    self.result.append(self.key[node])
+    if self.left[node] != -1:
+      self.preOrder(self.left[node])
+    if self.right[node] != -1:
+      self.preOrder(self.right[node])
+                        
     return self.result
 
-  def preOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
-                
-    return self.result
+  def postOrder(self,node=None):
+    if node is None:
+      node=0
+      self.result = []
 
-  def postOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
+    if self.left[node] != -1:
+      self.postOrder(self.left[node])
+        
+
+    if self.right[node] != -1:
+        self.postOrder(self.right[node])
+    
+    self.result.append(self.key[node])
+
                 
     return self.result
 
@@ -44,4 +80,6 @@ def main():
 	print(" ".join(str(x) for x in tree.preOrder()))
 	print(" ".join(str(x) for x in tree.postOrder()))
 
-threading.Thread(target=main).start()
+
+if __name__ == '__main__':
+  threading.Thread(target=main).start()

@@ -92,7 +92,7 @@ def longest_common_substring(s1, s2):
         if low > high:
             return aStart, bStart, max_length
        
-        if check1 and check2:
+        if string1.compare_other_hashclass(string2, 0, 0, mid):
             for a, b in matches1.items():
                 temp = matches2.get(a, -1)
                 if temp != -1:
@@ -153,3 +153,53 @@ if __name__=='__main__':
 		s, t = line.split()
 		ans = solve(s, t)
 		print(ans.i, ans.j, ans.len)
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+notes
+
+I had a bit of trouble with this one.  After I finally got it, I figured I would share some insights here about what ultimately worked (in C++):
+
+Initialization/Constructor
+
+    Identify one value x, one hash size (for the hash array), and two large prime numbers p1, p2 for computing two hash function values for comparison.  It was my experience that choice of x made some difference here.  If you are unable to pass after following the remainder of these instructions, try changing x and resubmitting.  
+
+    Regardless of whether s is longer than t, overwrite the member string s with the contents of the shorter input string and member string t with the longer input string.  Store whether or not a switch (s<->t) was required - if there was a switch, you will need to swap the i,j in the final answer's output for the matched substrings.  This allows creating a smaller hash map for comparison.
+
+    Precompute 2 h arrays (see definition in description following the problem statement for Substring Equality) for each input string s and t: one h array per hash function
+
+    Do not precompute powers of x mod p.  You might not need all of them, so don't waste the time and memory computing them.  Just call an efficient power function (see https://www.coursera.org/learn/data-structures/discussions/weeks/3/threads/9fWlJLuNEem-AQpTfWC26g/replies/6J6QDavoEeuw1Q42CpJ9yQ) for each trial length, l
+
+Solution (outer loop)
+
+    Binary search for main loop.  Start by trying l= mid = (right+left)/2, with right = min(s size, t size) and left = 0.  The longest possibility is the length of the shorter two strings
+
+    Check if there is a match between the two strings of length l (see Solution inner loop)
+
+    if there was a match, update the left endpoint to be l+1.  Update the current best guess (i.e. the longest substring indices i, j and length)
+
+    If there was not, update the right endpoint to be l-1
+
+    Run until left == right
+
+Solution (inner loop) - Input length l
+
+    Create hash array with desired hash size (I found 5000 worked ok), call it "Array"
+
+    Compute (x^l) % p1 using efficient power mod p algorithm
+
+    Compute hash function values for first hash function only for all substrings of length l of string s, take the value mod hash array size, and insert the index, a, and first hash function value, H1, into the hash chain at Array[H1 % hash size] (I used a list for the hash chain implementation, with new entries added to the front with push_front).  Use one of the h arrays for string s.
+
+    Until a match is found, consider, looping over index b of starting position of string in t, each substring of length, l, of string t.  Compute the first hash value using one of the cached h arrays for t and check if there is a collision with the hash array "Array".  If there was a collision, compute the second hash functions for both substring s (at stored index a) and substring of t at the current index, b.  If the second hash function values match, mark the indices a, b, and the length l and return.  You only need one match, so don't bother looking for any more after you have found one.
+    
+"""
