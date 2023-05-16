@@ -2,9 +2,16 @@
 
 import sys, threading
 
-sys.setrecursionlimit(10**7) # max depth of recursion
-threading.stack_size(2**25)  # new thread will get stack of such size
+#sys.setrecursionlimit(10**7) # max depth of recursion
+#threading.stack_size(2**25)  # new thread will get stack of such size
 
+
+sys.setrecursionlimit(10**7) # max depth of recursion
+
+print('sys.getrecursionlimit(): %d'%sys.getrecursionlimit())
+threading.stack_size(2**50)  # new thread will get stack of such size
+
+print('threading.stack_size(): %d'%threading.stack_size())
 
 def inOrderTraversal(tree, index, result):
   if index == -1:
@@ -19,10 +26,17 @@ class binarytreeclass:
   def __init__(self, tree):
     self.tree=tree
     self.result=[]
+    self.recursion=0
 
   def inOrderTraversal(self,index=0):
     if index == -1:
       return
+    self.recursion+=1
+    print('recursion: %d'%self.recursion)
+
+    #if self.recursion>=15830:
+    #  print('asldkfj')
+      #pass
     
     self.inOrderTraversal(self.tree[index][1])
     self.result.append(self.tree[index][0])
@@ -59,7 +73,10 @@ def IsBinarySearchTree(tree):
       break
   """
   binarytree=binarytreeclass(tree)
-  result=binarytree.inOrderTraversal()
+  try:
+    result=binarytree.inOrderTraversal()
+  except Exception as e:
+    print('Error in inOrderTraversal: %s'%e)
   valid=binarytree.checkBST()
   
 

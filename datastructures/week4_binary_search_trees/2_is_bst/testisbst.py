@@ -1,4 +1,5 @@
 import importlib  
+import pathlib
 isbst = importlib.import_module("is_bst")
 
 def test_in_order_traversal():
@@ -78,11 +79,47 @@ def test_isbinarysearchtree():
 
 
 def bigtree():
-    tree= \
+    """
+    CREATING A BIG TREE
+    """
+    treesize=1000000
+    tree=[]
+    for i in range(treesize):
+        tree.append([i+1,-1,-1])
+    
+        if 2*i+1<treesize:
+            tree[i][1]=2*i+1
+        if 2*i+2<treesize:
+            tree[i][2]=2*i+2
+    print(tree)
+
+    valid=isbst.IsBinarySearchTree(tree)
+    print(valid)
+
+
+def open_21_tree():
+    """
+    open 21 text file and create a tree
+    """
+    #print current path
+    #print(pathlib.Path(__file__).parent.absolute())
+    f=open('/home/philip/training/datastructures/week4_binary_search_trees/2_is_bst/21','r') #for some reason i have to use absolute path    print(f.read())
+    size=(f.readline())
+
+    tree=[]
+    for line in f:
+        tree.append(list(map(int,line.strip().split())))
+    f.close()
+
+    valid=isbst.IsBinarySearchTree(tree)
+    print(valid)
+
     
 
 
 if __name__=='__main__':
-    test_in_order_traversal()
-    test_isbinarysearchtree()
+    #test_in_order_traversal()
+    #test_isbinarysearchtree()
+    #bigtree()
+    open_21_tree()
     print('Test passed')
