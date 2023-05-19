@@ -1,7 +1,7 @@
 import importlib  
 import pathlib
 import threading, sys
-isbst = importlib.import_module("is_bst")
+isbst = importlib.import_module("is_bst_hard")
 
 
 
@@ -115,15 +115,27 @@ def open_21_tree():
     f.close()
 
     valid=isbst.IsBinarySearchTree(tree)
-    print(valid)
+    assert valid==False
+    print("finished open_21_tree test   <<<< if no see no pass")
 
+def duplicate_keys():
+    #duplicates on the left are not allowed
+    tree=[[2,1,2],[2,-1,-1],[3,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==False
+
+    #duplicates on the right are allowed
+    tree=[[2,1,2],[1,-1,-1],[2,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
     
 def main():
 
-    #test_in_order_traversal()
-    #test_isbinarysearchtree()
+    test_in_order_traversal()
+    test_isbinarysearchtree()
     #bigtree()
     open_21_tree()
+    duplicate_keys()
     print('Test passed')
 
 

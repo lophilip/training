@@ -6,12 +6,12 @@ import sys, threading
 #threading.stack_size(2**25)  # new thread will get stack of such size
 
 
-sys.setrecursionlimit(10**7) # max depth of recursion
+sys.setrecursionlimit(10**9) # max depth of recursion
 
-print('sys.getrecursionlimit(): %d'%sys.getrecursionlimit())
-threading.stack_size(2**50)  # new thread will get stack of such size
+#print('sys.getrecursionlimit(): %d'%sys.getrecursionlimit())
+threading.stack_size(2**27)  # new thread will get stack of such size
 
-print('threading.stack_size(): %d'%threading.stack_size())
+#print('threading.stack_size(): %d'%threading.stack_size())
 
 def inOrderTraversal(tree, index, result):
   if index == -1:
@@ -31,12 +31,6 @@ class binarytreeclass:
   def inOrderTraversal(self,index=0):
     if index == -1:
       return
-    self.recursion+=1
-    print('recursion: %d'%self.recursion)
-
-    #if self.recursion>=15830:
-    #  print('asldkfj')
-      #pass
     
     self.inOrderTraversal(self.tree[index][1])
     self.result.append(self.tree[index][0])
@@ -44,6 +38,28 @@ class binarytreeclass:
 
     return self.result
   
+
+  def inOrderTraversal_without_recurrsion(self,index=0):
+    
+    
+    #print('recursion: %d'%self.recursion)
+
+    #if self.recursion>=15830:
+    #  print('asldkfj')
+      #pass
+    
+    index=0
+    while self.tree[index][1]!=-1:
+      index=self.tree[index][1]
+    self.result.append(self.tree[index][0])
+
+    self.inOrderTraversal(self.tree[index][1])
+    self.result.append(self.tree[index][0])
+    self.inOrderTraversal(self.tree[index][2])
+
+    return self.result
+  
+
   def checkBST(self):
     for i in range(0,len(self.result)-1):
       if self.result[i]>=self.result[i+1]:
@@ -75,9 +91,11 @@ def IsBinarySearchTree(tree):
   binarytree=binarytreeclass(tree)
   try:
     result=binarytree.inOrderTraversal()
+    valid=binarytree.checkBST()
   except Exception as e:
     print('Error in inOrderTraversal: %s'%e)
-  valid=binarytree.checkBST()
+    valid=False
+  
   
 
   return valid
@@ -93,5 +111,5 @@ def main():
   else:
     print("INCORRECT")
 
-if __name__ == '__main__':
+if __name__== '__main__':
   threading.Thread(target=main).start()
