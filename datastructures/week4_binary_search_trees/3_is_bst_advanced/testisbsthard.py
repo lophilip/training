@@ -10,16 +10,14 @@ def test_in_order_traversal():
     result=[]
     index=0
     isbst.inOrderTraversal(tree, index, result)
-    print(result)
+    #print(result)
     assert result==[1,2,3]
-
-
 
     tree=[[1,1,2],[2,-1,-1],[3,-1,-1]]
     result=[]
     index=0
     isbst.inOrderTraversal(tree, index, result)
-    print(result)
+    #print(result)
     assert result==[2,1,3]
 
 
@@ -27,7 +25,7 @@ def test_in_order_traversal():
     result=[]
     index=0
     isbst.inOrderTraversal(tree, index, result)
-    print(result)
+    #print(result)
     assert result==[1,2,3,4,5]
 
 
@@ -35,7 +33,7 @@ def test_in_order_traversal():
     result=[]
     index=0
     isbst.inOrderTraversal(tree, index, result)
-    print(result)
+    #print(result)
     assert result==[1,2,3,4,5,6,7]
 
 
@@ -43,7 +41,7 @@ def test_in_order_traversal():
     result=[]
     index=0
     isbst.inOrderTraversal(tree, index, result)
-    print(result)
+    #print(result)
     assert result==[1,2,5,4]
 
 
@@ -128,6 +126,41 @@ def duplicate_keys():
     tree=[[2,1,2],[1,-1,-1],[2,-1,-1]]
     valid=isbst.IsBinarySearchTree(tree)
     assert valid==True
+
+    #max possible value 32 int is valid
+    tree=[[2147483647,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+    #unbalanced tree is valid
+    tree=[[1,-1,1],[2,-1,2],[3,-1,3],[4,-1,4],[5,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+    #valid full binary tree
+    tree=[[4,1,2],[2,3,4],[6,5,6],[1,-1,-1],[3,-1,-1],[5,-1,-1],[7,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+    #emty tree is valid
+    tree=[]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+
+    #tree with duplicates on the right is valid
+    tree=[[4,1,2],[2,3,4],[6,5,6],[1,-1,-1],[3,-1,-1],[5,-1,-1],[6,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+    #unbalanced tree with duplicates on the right is valid
+    tree=[[4,1,2],[3,3,-1],[6,6,7],[1,-1,4],[2,5,-1],[1,-1,-1],[4,-1,-1],[7,-1,-1]]
+    valid=isbst.IsBinarySearchTree(tree)
+    assert valid==True
+
+
+
+
     
 def main():
 

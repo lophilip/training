@@ -26,24 +26,38 @@ class binarytreeclass:
   def __init__(self, tree):
     self.tree=tree
     self.result=[]
+    self.result_left_transitions=[]  #list of left transitions
+    self.result_right_transitions=[]  #list of right transitions
     self.recursion=0
     self.duplicates={}  #dict of duplicates, key is the index to result, value is true or false if value[key+1] is allowed duplicate
+
     #allowed duplicates are only allowed on the right side of the tree
+
+    self.left_transitions=0
+    self.right_transitions=0
     
 
   def inOrderTraversal(self,index=0):
     if index == -1:
       return
     
+    self.left_transitions+=1
     self.inOrderTraversal(self.tree[index][1])
+    self.left_transitions-=1
     self.result.append(self.tree[index][0])
+    self.result_left_transitions.append(self.left_transitions)
+    self.result_right_transitions.append(self.right_transitions)
 
     if len(self.result)>=2:
-      if self.result[-1]==self.result[-2]:
+      if self.result[-1]==self.result[-2]: 
         self.duplicates[len(self.result)-2]=False
+        if self.result_right_transitions[-1] > self.result_right_transitions[-2]: #allow duplicates on the right side of tree
+          self.duplicates[len(self.result)-2]=True
     
     lenresult=len(self.result)
+    self.right_transitions+=1
     self.inOrderTraversal(self.tree[index][2])
+    self.right_transitions-=1
     lenresult2=len(self.result)
     if len(self.result)>=2:
       if self.result[-1]==self.result[-2] and lenresult2>lenresult:
@@ -67,7 +81,7 @@ class binarytreeclass:
     return True
   
 
-def IsBinarySearchTree(tree):
+def IsBinarySearchTree(tree, printresult=True):
   # Implement correct algorithm here
   #print (tree)
   if tree==[]:
@@ -76,21 +90,13 @@ def IsBinarySearchTree(tree):
   index=0
   valid=True
 
-  """
-  try:
-    inOrderTraversal(tree, index, result)
-  except:
-    print('Error in inOrderTraversal')
-  valid=True
-  
-  for i in range(0,len(result)-1):
-    if result[i]>=result[i+1]:
-      valid=False
-      break
-  """
   binarytree=binarytreeclass(tree)
   
-  result=binarytree.inOrderTraversal()
+  result=binarytree.inOrderTraversal()  
+
+  if printresult:
+    print(result)
+    print(binarytree.duplicates)
   valid=binarytree.checkBST()
   
   
@@ -104,7 +110,7 @@ def main():
   tree = []
   for i in range(nodes):
     tree.append(list(map(int, sys.stdin.readline().strip().split())))
-  if IsBinarySearchTree(tree):
+  if IsBinarySearchTree(tree,printresult=False):
     print("CORRECT")
   else:
     print("INCORRECT")
