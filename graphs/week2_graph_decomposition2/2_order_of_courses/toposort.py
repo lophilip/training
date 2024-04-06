@@ -95,9 +95,20 @@ def transverse_dfs(node,index,path=[]):  #assume graph is DAG/acyclic
             path.append(index)                    
             for i in range(len(node)):      #need to optimize this loop
                 node[i].remove_adj(index) #remove index from all nodes                
-        else:        
+        else:
+            """
+            for i in path:
+                currentnode.remove_adj(i)
+            if len(currentnode.adj)>0:
+                nextnode=currentnode.adj[0]
+                transverse_dfs(node,nextnode,path) #if not DAG will cycle forever!    
+            else:
+                sink=True                
+                if index not in path:
+                    path.append(index)                    
+            """
             nextnode=currentnode.adj[0]
-            transverse_dfs(node,nextnode,path) #if not DAG will cycle forever!    
+            transverse_dfs(node,nextnode,path)
     return sink
 
 
@@ -181,16 +192,16 @@ def toposort_bak1(adj): #adj is nodes
     #    path[i]+=1
     return path
 
-def toposort(adj): #adj is nodes
+def toposort_bak1(adj): #adj is nodes
     used = [0] * len(adj)
     order = []
     #write your code here
-    nodes=list(adj)
+    copyadj=list(adj)
 
     num_vertices=len(adj)
 
 
-    edges=get_edges(nodes)
+    edges=get_edges(copyadj)
 
     reversed_edges=[]
     for i in edges:
@@ -226,7 +237,7 @@ def toposort(adj): #adj is nodes
     while all_visited==False:
         visited=[]
         unvisited=[]
-        
+                
         sink=transverse_dfs(node,currentnode,visited)
 
         path=visited[::-1]+path
@@ -239,7 +250,7 @@ def toposort(adj): #adj is nodes
         if len(unvisited)==0:
             all_visited=True
         else:                     
-            for i in range(0,len(unvisited)):
+            for i in range(0,len(unvisited)):       #need to optimized this loop
                 currentnode=unvisited[i]
                 if node[unvisited[i]].is_source()==True:                    
                     break
@@ -248,7 +259,87 @@ def toposort(adj): #adj is nodes
 
     return path
     
+def toposort(adj): #adj is nodes
+    used = [0] * len(adj)
+    order = []
+    #write your code here
+    copyadj=list(adj)
+
+    num_vertices=len(adj)
+
+
+    edges=get_edges(copyadj)
+
+    reversed_edges=[]
+    for i in edges:
+        reversed_edges.append([i[1],i[0]])
+
     
+
+    node=[]
+    for i in range(num_vertices):
+        node.append(graphnodeclass(i))
+        #if i in vertices:
+        #    node[i].exists=True
+        if i>=0:
+            node[i].exists=True
+    
+    for i in edges:
+        node[i[0]].add_adj(i[1])
+    
+    for i in reversed_edges:
+        node[i[0]].add_reverse_adj(i[1])
+    
+    currentnode=0
+
+    all_visited=False
+
+    path=[]
+    currentnode=0
+
+    while node[currentnode].is_source()==False and currentnode<num_vertices-1:  #start with source
+        currentnode+=1
+
+    unvisited=[]
+    for i in range(0,num_vertices):
+        unvisited.append(i)
+    
+
+    #find node that
+    while all_visited==False:
+        visited=[]
+        new_path=[]
+                        
+        sink=transverse_dfs(node,currentnode,visited)
+
+        if sink:
+            new_path.append(currentnode)
+
+        new_path=visited[::-1]
+
+        path=new_path+path
+
+        #check if all nodes visited
+        """
+        for i in range(0,len(new_path)):
+            if new_path[i] in unvisited:
+                unvisited.remove(new_path[i])        
+        """
+        new_unvisited=list(set(unvisited)-set(new_path))
+        unvisited=new_unvisited
+
+        
+        if len(unvisited)==0:
+            all_visited=True
+        else:                     
+            for i in range(0,len(unvisited)):       #need to optimized this loop
+                currentnode=unvisited[i]
+                if node[unvisited[i]].is_source()==True:                    
+                    break
+            assert node[currentnode].is_source()==True, 'currentnode is not source'
+
+
+    return path    
     
     
 
