@@ -503,14 +503,16 @@ def test4_topsort():
         
     
 if __name__=="__main__":
-    test1_topsort()
-    #test2_topsort()
+    #test1_topsort()
+    test2_topsort()
     #test3_topsort()
     #test4_topsort()
 
+    print("start random tests")
+
     #testrandom_topsort(test=10000, maxnum_vertices=100, maxnum_edges=100)
     #testrandom_topsort(test=1000, maxnum_vertices=1000, maxnum_edges=100)
-    #testrandom_topsort(test=1, maxnum_vertices=10000, maxnum_edges=10000)
+    #testrandom_topsort(test=1, maxnum_vertices=100000, maxnum_edges=100000)
 
 
     print ("all tests passed")

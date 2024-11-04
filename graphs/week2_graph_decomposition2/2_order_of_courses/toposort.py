@@ -259,7 +259,7 @@ def toposort_bak1(adj): #adj is nodes
 
     return path
     
-def toposort(adj): #adj is nodes
+def toposort_philip(adj): #adj is nodes
     used = [0] * len(adj)
     order = []
     #write your code here
@@ -342,7 +342,64 @@ def toposort(adj): #adj is nodes
     return path    
     
     
+def toposort_copilot(adj):
+    num_vertices = len(adj)
+    in_degree = [0] * num_vertices  # Array to keep track of in-degrees of nodes
 
+    # Calculate in-degrees of all nodes
+    for i in range(num_vertices):
+        for j in adj[i]:
+            in_degree[j] += 1
+
+    # List to store nodes with in-degree 0
+    zero_in_degree_list = [i for i in range(num_vertices) if in_degree[i] == 0]
+
+    topological_order = []
+
+    while zero_in_degree_list:
+        node = zero_in_degree_list.pop()
+        topological_order.append(node)
+
+        # Decrease in-degree of all adjacent nodes
+        for neighbor in adj[node]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                zero_in_degree_list.append(neighbor)
+
+    if len(topological_order) == num_vertices:
+        return topological_order
+    else:
+        raise ValueError("Graph is not a DAG")
+
+def _dfs(adj, visited, order, x):
+    visited[x] = True
+    for i in adj[x]:
+        if visited[i] == False:
+            _dfs(adj, visited, order, i)
+    order.append(x)
+
+
+def toposort_dfs_philip(adj):
+    num_vertices = len(adj)
+    visited=[False]*num_vertices
+    order=[]
+    sink=[False]*num_vertices
+
+    for i in range(num_vertices):
+        for j in adj[i]:
+            sink[j]=True
+
+    for i in range (num_vertices):
+        if visited[i]==False and adj[i].is_sink(): #to do need to start
+            _dfs(adj, visited, order, i)
+
+    reverseorder=order[::-1]
+    return reverseorder
+
+
+def toposort(adj):
+    return toposort_copilot(adj)
+    #return toposort_dfs_philip(adj)
 
 
 if __name__ == '__main__':
