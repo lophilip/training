@@ -2,6 +2,7 @@ import toposort
 import random
 
 import networkx as nx
+import datetime
 
 def getnodes(edges,num_nodes):
     adj=[]
@@ -460,6 +461,7 @@ def test3_topsort():
 def testrandom_topsort(test=1000, maxnum_vertices=1000, maxnum_edges=1000):
 
     ntest=0
+    
     while ntest<test:
         
         num_vertices=random.randint(1,maxnum_vertices)
@@ -477,13 +479,15 @@ def testrandom_topsort(test=1000, maxnum_vertices=1000, maxnum_edges=1000):
             ntest+=1
             print("start test %d/%d"%(ntest,test))
 
+            starttime=datetime.datetime.now()
             order=toposort.toposort(getnodes(graph,num_vertices))
+            endtime=datetime.datetime.now()
             order_one=[]
             for i in order:        
                 order_one.append(i+1)
             
-            
-            print("test%d/%d %r"%(ntest,test,order_one))
+            timetook=endtime-starttime
+            print("test%d/%d %r   seconds=%d"%(ntest,test,order_one,timetook.seconds))
             
 def test4_topsort():
     edges = [[2, 1], [3,2], [3,1], [4,3], [4,1], [5,2], [5,3]]
@@ -499,14 +503,14 @@ def test4_topsort():
         
     
 if __name__=="__main__":
-    #test1_topsort()
+    test1_topsort()
     #test2_topsort()
-    test3_topsort()
+    #test3_topsort()
     #test4_topsort()
 
     #testrandom_topsort(test=10000, maxnum_vertices=100, maxnum_edges=100)
     #testrandom_topsort(test=1000, maxnum_vertices=1000, maxnum_edges=100)
-    #testrandom_topsort(test=1, maxnum_vertices=100000, maxnum_edges=100000)
+    #testrandom_topsort(test=1, maxnum_vertices=10000, maxnum_edges=10000)
 
 
     print ("all tests passed")
